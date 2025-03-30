@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+* Updated restic to 0.18.0
+* Swapped mailx out for s-nail
 
 ## v1.3.2 (restic 0.16.0)
 
