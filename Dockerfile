@@ -6,13 +6,14 @@ RUN unzip rclone-current-linux-amd64.zip && mv rclone-*-linux-amd64/rclone /bin/
 
 FROM restic/restic:0.18.0
 
-RUN apk add --update --no-cache curl mailx
+RUN apk add --update --no-cache curl s-nail
 
 COPY --from=rclone /bin/rclone /bin/rclone
 
 RUN \
-    mkdir -p /mnt/restic /var/spool/cron/crontabs /var/log; \
-    touch /var/log/cron.log;
+    mkdir -p /mnt/restic /var/spool/cron/crontabs /var/log /root/.config/rclone; \
+    touch /var/log/cron.log; \
+    touch /root/.config/rclone/rclone.conf
 
 ENV RESTIC_REPOSITORY=/mnt/restic
 ENV RESTIC_PASSWORD=""
