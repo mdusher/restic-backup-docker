@@ -6,7 +6,7 @@ RUN unzip rclone-current-linux-amd64.zip && mv rclone-*-linux-amd64/rclone /bin/
 
 FROM restic/restic:0.18.0
 
-RUN apk add --update --no-cache curl s-nail
+RUN apk add --no-cache curl s-nail
 
 COPY --from=rclone /bin/rclone /bin/rclone
 
