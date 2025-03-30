@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  restic:
+    image: quay.io/mdusher/restic-backup-docker:latest
+    hostname: synologynas
+    restart: always
+    privileged: true
+    volumes:
+      - type: bind
+        source: /volume1/homes
+        target: /data/homes
+        read_only: true
+    environment:
+      - RCLONE_CONFIG_STORJ_TYPE=s3
+      - RCLONE_CONFIG_STORJ_PROVIDER=Storj
+      - RCLONE_CONFIG_STORJ_ACCESS_KEY_ID=<ACCESS KEY>
+      - RCLONE_CONFIG_STORJ_SECRET_ACCESS_KEY=<SECRET KEY>
+      - RCLONE_CONFIG_STORJ_ENDPOINT=gateway.storjshare.io
+      - RESTIC_REPOSITORY=rclone:storj:<BUCKET NAME>
+      - RESTIC_PASSWORD=<SUPER_SECRET_PASSWORD>
+      - BACKUP_CRON=13 1 * * 6 # Backup on the 3rd of every month at 0h30
+      - RESTIC_FORGET_ARGS=--prune --keep-last 12
+      - RESTIC_PROGRESS_FPS=0.25 # increase verbosity
