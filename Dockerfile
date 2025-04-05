@@ -51,9 +51,9 @@ RUN mkdir /.cache && \
 # /data is the dir where you have to put the data to be backed up
 VOLUME /data
 
-COPY backup.sh /bin/backup
-COPY check.sh /bin/check
-COPY entry.sh /entry.sh
+COPY files/backup.sh /bin/backup
+COPY files/check.sh /bin/check
+COPY files/entry.sh /entry.sh
 
 ENTRYPOINT ["/entry.sh"]
 CMD ["tail","-fn0","/var/log/cron.log"]
