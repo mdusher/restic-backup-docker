@@ -2,8 +2,8 @@ version: '3'
 
 services:
   restic:
-    image: quay.io/mdusher/restic-backup-docker:latest
-    hostname: synologynas
+    image: ghcr.io/mdusher/restic-backup-docker:latest
+    hostname: synologynas # restic uses the hostname for it's snapshots, so set this uniquely.
     restart: always
     privileged: true
     volumes:
