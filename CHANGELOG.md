@@ -1,8 +1,12 @@
 # Changelog
 
 ## Unreleased
-* Updated restic to 0.18.0
-* Swapped mailx out for s-nail
+
+## v1.4.0 (restic 0.18.0)
+* Updated to restic 0.18.0
+* Lock `alpine` container image version to `3.21`
+* Lock `rclone` version to `v1.69.1`
+* Swapped mailx out for s-nail, mailx syntax has changed.
 
 ## v1.3.2 (restic 0.16.0)
 
