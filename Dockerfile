@@ -54,6 +54,7 @@ VOLUME /data
 COPY files/backup.sh /bin/backup
 COPY files/check.sh /bin/check
 COPY files/entry.sh /entry.sh
+RUN chmod +x /bin/backup /bin/check /entry.sh
 
 ENTRYPOINT ["/entry.sh"]
 CMD ["tail","-fn0","/var/log/cron.log"]
