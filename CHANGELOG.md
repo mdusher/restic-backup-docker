@@ -10,6 +10,10 @@
 * Remove Teams hook
 * Remove Openstack Swift support
 * Removed "Not found" log message for pre and post backup scripts
+* Made RESTIC_TAG optional
+* Moved rclone architecture to a build argument in the Dockerfile
+* Add validation for required environment variables to entry.sh
+* Cleaned up readme
 
 ## v1.4.0 (restic 0.18.0)
 * Updated to restic 0.18.0
