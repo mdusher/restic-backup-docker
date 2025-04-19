@@ -8,23 +8,22 @@ This container runs restic backups in regular intervals.
 * Support `restic mount` inside the container to browse the backup files
 
 **Container**:
-* [ghcr.io/lobaro/restic-backup-docker](https://github.com/lobaro/restic-backup-docker/pkgs/container/restic-backup-docker)
-* Old: [lobaro/restic-backup-docker](https://hub.docker.com/r/lobaro/restic-backup-docker/)
+* [ghcr.io/mdusher/restic-backup-docker](https://github.com/mdusher/restic-backup-docker/pkgs/container/restic-backup-docker)
 
 Latest master (experimental):
 ```
-docker pull ghcr.io/lobaro/restic-backup-docker:master
+docker pull ghcr.io/mdusher/restic-backup-docker:master
 ```
 
 Latest release:
 ```
-docker pull ghcr.io/lobaro/restic-backup-docker:latest
+docker pull ghcr.io/mdusher/restic-backup-docker:latest
 ```
 
 # Contributing
 Pull Requests to improve the image are always wellcome. Please create an issue about the PR first.
 
-When behaviour of the image changes (Features, Bugfixes, Changes in the API) please update the "Unreleased" section of the [CHANGELOG.md](https://github.com/lobaro/restic-backup-docker/blob/master/CHANGELOG.md)
+When behaviour of the image changes (Features, Bugfixes, Changes in the API) please update the "Unreleased" section of the [CHANGELOG.md](https://github.com/mdusher/restic-backup-docker/blob/master/CHANGELOG.md)
 
 
 ## Hooks
@@ -36,36 +35,6 @@ If you need to execute a script before or after each backup or check, you need t
 
 Call your pre-backup script `pre-backup.sh` and post-backup script `post-backup.sh`. You can also have separate scripts when running data verification checks `pre-check.sh` and `post-check.sh`.
 
-Please don't hesitate to report any issues you find. **Thanks.**
-
-# Test the container
-
-Clone this repository:
-```
-git clone https://github.com/Lobaro/restic-backup-docker.git
-cd restic-backup-docker
-```
-
-Build the container (the container is named `backup-test`):
-```
-./build.sh
-```
-
-Run the container:
-```
-./run.sh
-```
-
-This will run the container `backup-test` with the name  `backup-test`. Existing containers with that name are completely removed automatically.
-
-The container will back up `~/test-data` to a repository with password `test` at `~/test-repo` every minute. The repository is initialized automatically by the container. If you'd like to change the arguments passed to `restic init`, you can do so using the `RESTIC_INIT_ARGS` env variable.
-
-To enter your container execute:
-```
-docker exec -ti backup-test /bin/sh
-```
-
-Now you can use restic [as documented](https://restic.readthedocs.io/en/stable/), e.g. try to run `restic snapshots` to list all your snapshots.
 
 ## Logfiles
 Logfiles are inside the container. If needed, you can create volumes for them.
@@ -168,7 +137,7 @@ version: '3'
 
 services:
   restic:
-    image: lobaro/restic-backup-docker:latest
+    image: ghcr.io/mdusher/restic-backup-docker:latest
     hostname: nas                                     # This will be visible in restic snapshot list
     restart: always
     privileged: true
@@ -186,7 +155,3 @@ services:
       - RESTIC_DATA_SUBSET=50G                             # Download 50G of data from "storageserver" every Wednesday 22:00 UTC and check the data integrity
       - RESTIC_FORGET_ARGS=--prune --keep-last 12          # Only keep the last 12 snapshots
 ```
-
-# Versioning
-Starting from v1.3.0 versioning follows [Semantic versioning](http://semver.org/)
-
