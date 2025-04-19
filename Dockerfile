@@ -4,15 +4,13 @@ ARG RCLONE_VERSION=v1.69.1
 ADD https://downloads.rclone.org/v1.69.1/rclone-${RCLONE_VERSION}-linux-amd64.zip /
 RUN unzip rclone-${RCLONE_VERSION}-linux-amd64.zip && mv rclone-${RCLONE_VERSION}-linux-amd64/rclone /bin/rclone && chmod +x /bin/rclone
 
-FROM restic/restic:0.18.0
+FROM docker.io/restic/restic:0.18.0
 
 RUN apk add --update --no-cache curl s-nail
 
 COPY --from=rclone /bin/rclone /bin/rclone
 
-RUN \
-    mkdir -p /mnt/restic \
-             /var/spool/cron/crontabs \
+RUN mkdir -p /var/spool/cron/crontabs \
              /var/log \
              /root/.config/rclone; \
     touch /var/log/cron.log; \
@@ -49,4 +47,4 @@ COPY files/entry.sh /entry.sh
 RUN chmod +x /bin/backup /bin/check /entry.sh
 
 ENTRYPOINT ["/entry.sh"]
-CMD ["tail","-fn0","/var/log/cron.log"]
+CMD ["/usr/sbin/crond", "-f"]
