@@ -47,18 +47,6 @@ fi
 end=`date +%s`
 echo "Finished Check at $(date +"%Y-%m-%d %H:%M:%S") after $((end-start)) seconds"
 
-if [ -n "${TEAMS_WEBHOOK_URL}" ]; then
-    teamsTitle="Restic Last Check Log"
-    teamsMessage=$( cat ${lastLogfile} | sed 's/"/\"/g' | sed "s/'/\'/g" | sed ':a;N;$!ba;s/\n/\n\n/g' )
-    teamsReqBody="{\"title\": \"${teamsTitle}\", \"text\": \"${teamsMessage}\" }"
-    sh -c "curl -H 'Content-Type: application/json' -d '${teamsReqBody}' '${TEAMS_WEBHOOK_URL}' > ${lastMicrosoftTeamsLogfile} 2>&1"
-    if [ $? == 0 ]; then
-        echo "Microsoft Teams notification successfully sent."
-    else
-        echo "Sending Microsoft Teams notification FAILED. Check ${lastMicrosoftTeamsLogfile} for further information."
-    fi
-fi
-
 if [ -n "${MAILX_ARGS}" ]; then
     sh -c "mail -v -S sendwait ${MAILX_ARGS} < ${lastLogfile} > ${lastMailLogfile} 2>&1"
     if [ $? == 0 ]; then
