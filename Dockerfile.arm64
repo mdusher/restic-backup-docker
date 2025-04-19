@@ -1,19 +1,18 @@
-FROM docker.io/alpine:latest AS rclone
-# Download rclone
-ARG RCLONE_VERSION=v1.69.1
-ADD https://downloads.rclone.org/v1.69.1/rclone-${RCLONE_VERSION}-linux-amd64.zip /
-RUN unzip rclone-${RCLONE_VERSION}-linux-amd64.zip && mv rclone-${RCLONE_VERSION}-linux-amd64/rclone /bin/rclone && chmod +x /bin/rclone
+FROM docker.io/alpine:latest as rclone
 
-FROM restic/restic:0.18.0
+# Get rclone executable
+ADD https://downloads.rclone.org/rclone-current-linux-arm64.zip /
+RUN unzip rclone-current-linux-arm64.zip && mv rclone-*-linux-arm64/rclone /bin/rclone && chmod +x /bin/rclone
 
-RUN apk add --update --no-cache curl s-nail
+FROM docker.io/restic/restic:0.18.0
+
+RUN apk add --update --no-cache curl mailx
 
 COPY --from=rclone /bin/rclone /bin/rclone
 
 RUN \
-    mkdir -p /mnt/restic /var/spool/cron/crontabs /var/log /root/.config/rclone; \
-    touch /var/log/cron.log; \
-    touch /root/.config/rclone/rclone.conf
+    mkdir -p /mnt/restic /var/spool/cron/crontabs /var/log; \
+    touch /var/log/cron.log;
 
 ENV RESTIC_REPOSITORY=/mnt/restic
 ENV RESTIC_PASSWORD=""
@@ -51,10 +50,9 @@ RUN mkdir /.cache && \
 # /data is the dir where you have to put the data to be backed up
 VOLUME /data
 
-COPY files/backup.sh /bin/backup
-COPY files/check.sh /bin/check
-COPY files/entry.sh /entry.sh
-RUN chmod +x /bin/backup /bin/check /entry.sh
+COPY backup.sh /bin/backup
+COPY check.sh /bin/check
+COPY entry.sh /entry.sh
 
 ENTRYPOINT ["/entry.sh"]
 CMD ["tail","-fn0","/var/log/cron.log"]
