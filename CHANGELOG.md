@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## v1.4.1 (restic 0.18.0)
+* Use full base image names
+* Refactor to mdusher's preferred script style
+* Make crond the container's running process
+* Modify entry.sh to forward output to crond's stdout
+* Remove Teams hook
+* Remove Openstack Swift support
+* Removed "Not found" log message for pre and post backup scripts
+
 ## v1.4.0 (restic 0.18.0)
 * Updated to restic 0.18.0
 * Lock `alpine` container image version to `3.21`
