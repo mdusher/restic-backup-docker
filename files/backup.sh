@@ -28,8 +28,15 @@ log "RESTIC_REPOSITORY: ${RESTIC_REPOSITORY}"
 [ ! -z "${B2_ACCOUNT_ID}" ] && log "B2_ACCOUNT_ID: ${B2_ACCOUNT_ID}"
 
 # Do not save full backup log to logfile but to backup-last.log
-restic backup /data ${RESTIC_JOB_ARGS} --tag=${RESTIC_TAG?"Missing environment variable RESTIC_TAG"} >> ${RESTIC_BACKUP_LOG} 2>&1
-backup_rc=$?
+backup_rc=1
+if [ -z "${RESTIC_TAG}" ]; then
+  restic backup /data ${RESTIC_JOB_ARGS} >> ${RESTIC_BACKUP_LOG} 2>&1
+  backup_rc=$?
+else
+  restic backup /data ${RESTIC_JOB_ARGS} --tag="${RESTIC_TAG}" >> ${RESTIC_BACKUP_LOG} 2>&1
+  backup_rc=$?
+fi
+
 log "Finished backup at $(date)"
 if [ "${backup_rc}" -eq 0 ]; then
     log_and_echo "Backup Successful"
